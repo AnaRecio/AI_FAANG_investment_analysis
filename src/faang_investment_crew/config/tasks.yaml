@@ -1,0 +1,74 @@
+tasks:
+  research_meta:
+    description: Research Meta Platforms' recent market activity and performance.
+    expected_output: A structured JSON object with summary text and list of sources for Meta's Q1 2025 performance, including stock trends, major news, and analyst opinions.
+    agent: researcher
+    tools:
+      - serper_search
+      - yahoo_finance_data
+
+  research_apple:
+    description: Research Apple Inc.'s recent market activity and performance.
+    expected_output: A structured JSON object with summary text and list of sources for Apple's Q1 2025 performance, including stock trends, major news, and analyst opinions.
+    agent: researcher
+    tools:
+      - serper_search
+      - yahoo_finance_data
+
+  research_amazon:
+    description: Research Amazon's recent market activity and performance.
+    expected_output: A structured JSON object with summary text and list of sources for Amazon's Q1 2025 performance, including stock trends, major news, and analyst opinions.
+    agent: researcher
+    tools:
+      - serper_search
+      - yahoo_finance_data
+
+  research_netflix:
+    description: Research Netflix's recent market activity and performance.
+    expected_output: A structured JSON object with summary text and list of sources for Netflix's Q1 2025 performance, including stock trends, major news, and analyst opinions.
+    agent: researcher
+    tools:
+      - serper_search
+      - yahoo_finance_data
+
+  research_google:
+    description: Research Alphabet Inc. (Google)'s recent market activity and performance.
+    expected_output: A structured JSON object with summary text and list of sources for Alphabet's Q1 2025 performance, including stock trends, major news, and analyst opinions.
+    agent: researcher
+    tools:
+      - serper_search
+      - yahoo_finance_data
+
+  analysis_task:
+    description: >
+      Analyze the structured research data for each FAANG company, which includes a summary and source links.
+      For each company:
+        - Extract and summarize key financial performance (e.g., revenue trends, stock movement, earnings guidance).
+        - Assign a simple sentiment score (Positive, Neutral, or Negative) based on keyword analysis of the summary:
+          - Positive keywords: growth, outperform, strong, record, beat, rally, bullish, upside
+          - Negative keywords: decline, miss, weak, fall, drop, bearish, risk, slowdown
+        - Fill a comparative financial table with consistent metrics across companies (e.g., Revenue Forecast, P/E Ratio, YoY Stock Performance, Sentiment, Recommendation).
+        - Note "Data Not Found" where information is unavailable.
+        - Provide an overall investment recommendation per company and justify it.
+
+      Also include:
+        - A `company-specific_assessments` section with detailed analysis and sentiment per company.
+        - A `strategic_investment_insights` section summarizing recommendations and reasoning.
+        - A `sources` list aggregating all unique links used in the research.
+    expected_output: >
+      A structured JSON object with:
+        - executive_summary: string
+        - comparative_financial_table: object
+        - company-specific_assessments: object
+        - strategic_investment_insights: object
+        - sources: list
+    agent: analyst
+    tools:
+      - yahoo_finance_data
+
+  reporting_task:
+    description: Generate a final investor-friendly report including executive summary, visualizations, recommendations, and sources.
+    expected_output: A polished Markdown and HTML report with embedded charts, comparative tables, and actionable investment conclusions.
+    agent: reporting_analyst
+    output_file: knowledge/faang_report.md
+

@@ -1,0 +1,26 @@
+# Ignore Python cache and OS clutter
+__pycache__/
+.DS_Store
+
+# Ignore local env variables (API keys)
+.env
+
+# Ignore Python environments
+.venv/
+venv/
+__pycache__/
+.DS_Store
+.env
+.env.*
+!.env.example
+
+
+# Ignore output files but allow knowledge/
+output/
+!src/faang_investment_crew/knowledge/**
+
+# Ignore temp report variations
+*.md_*
+*.html
+*.pdf
+

@@ -1,0 +1,28 @@
+[project]
+name = "faang_investment_crew"
+version = "0.1.0"
+description = "faang_investment_crew using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "crewai[tools]>=0.108.0,<1.0.0",
+    "weasyprint>=60.2",
+    "markdown2>=2.4.12",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0"
+]
+
+[project.scripts]
+faang_investment_crew = "faang_investment_crew.main:run"
+run_crew = "faang_investment_crew.main:run"
+train = "faang_investment_crew.main:train"
+replay = "faang_investment_crew.main:replay"
+test = "faang_investment_crew.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
+entrypoint = "faang_investment_crew.crew:FaangInvestmentCrew"
