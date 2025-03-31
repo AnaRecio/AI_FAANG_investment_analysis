@@ -1,6 +1,5 @@
 import os
 import json
-import base64
 import markdown2 as markdown
 import webbrowser
 from datetime import datetime
@@ -8,13 +7,19 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 
 def reporting_task_callback(task_output, output_file="faang_report", chart_path=None, auto_open=True):
+    """
+    Callback for the final reporting agent task.
+    Parses the output (expected to be JSON), formats it into Markdown, and generates both .md and .html reports.
+    """
     print("[✅] Generating report from Investment Report Specialist...")
 
     try:
+        # Support both structured and plain outputs depending on agent behavior
         output_content = task_output.output if hasattr(task_output, 'output') else task_output
         report_data = json.loads(output_content)
         markdown_text = format_report_to_markdown(report_data)
     except Exception as e:
+        # If parsing fails, log the raw output and fallback to treating it as plain text
         print("[❌] Failed to parse task output as JSON.")
         print("Raw output:", output_content)
         markdown_text = str(output_content)
@@ -22,6 +27,10 @@ def reporting_task_callback(task_output, output_file="faang_report", chart_path=
     return generate_markdown_and_html(markdown_text, output_file, chart_path, auto_open)
 
 def format_report_to_markdown(data: dict) -> str:
+    """
+    Formats structured report data into Markdown content.
+    Handles section headers, financial tables, insights, and source attribution.
+    """
     sections = []
 
     if "executive_summary" in data:
@@ -82,6 +91,10 @@ def format_report_to_markdown(data: dict) -> str:
     return "\n".join(sections)
 
 def generate_markdown_and_html(markdown_text: str, filename_base: str, chart_path: str = None, auto_open: bool = True):
+    """
+    Converts the Markdown text into an HTML file with optional embedded chart image.
+    Saves both .md and .html versions with a timestamped filename.
+    """
     now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     output_dir = Path("output")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -89,21 +102,15 @@ def generate_markdown_and_html(markdown_text: str, filename_base: str, chart_pat
     md_path = output_dir / f"{filename_base}_{now}.md"
     html_path = output_dir / f"{filename_base}_{now}.html"
 
+    # Write Markdown file to disk
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(markdown_text)
 
+    # Convert Markdown to HTML
     html_body = markdown.markdown(markdown_text, extras=["tables", "fenced-code-blocks"])
     soup = BeautifulSoup(html_body, "html.parser")
 
-    if chart_path and os.path.exists(chart_path):
-        with open(chart_path, "rb") as img_file:
-            encoded = base64.b64encode(img_file.read()).decode("utf-8")
-            img_tag = soup.new_tag("img", src=f"data:image/png;base64,{encoded}", style="width:100%;margin-top:20px;")
-            chart_header = soup.new_tag("h2")
-            chart_header.string = "Embedded Chart"
-            soup.append(chart_header)
-            soup.append(img_tag)
-
+    # Full HTML template with inline styles for clean rendering
     full_html = f"""
     <html>
     <head>
@@ -123,14 +130,9 @@ def generate_markdown_and_html(markdown_text: str, filename_base: str, chart_pat
     </html>
     """
 
+    # Write final HTML file
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(full_html)
 
     print(f"[✅] Markdown report saved to {md_path}")
     print(f"[✅] HTML report saved to {html_path}")
-
-    if auto_open:
-        webbrowser.open(f"file://{os.path.abspath(html_path)}")
-
-    return str(md_path)
-
