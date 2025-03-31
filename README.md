@@ -115,7 +115,7 @@ The generated report includes:
 
 ### Dependencies
 - Core: `crewai`
-- Data & Visualization: `yfinance`, `matplotlib`
+- Data: `yfinance`
 - Web & Parsing: `requests`, `beautifulsoup4`
 - Report Generation: `markdown2`, `weasyprint`
 
