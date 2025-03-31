@@ -3,7 +3,7 @@ import warnings
 from datetime import datetime
 from faang_investment_crew.crew import FaangInvestmentCrew
 
-# Suppress a known spacy-related warning from pysbd (used in some LLM pipelines)
+# Suppress a known spacy-related warning from pysbd
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 def run():
