@@ -83,7 +83,7 @@ def format_report_to_markdown(data: dict) -> str:
 
 def generate_markdown_and_html(markdown_text: str, filename_base: str, chart_path: str = None, auto_open: bool = True):
     now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    output_dir = Path(__file__).resolve().parent.parent.parent / "knowledge"
+    output_dir = Path(__file__).resolve().parent.parent / "knowledge"
     output_dir.mkdir(parents=True, exist_ok=True)
     
     filename_base = Path(filename_base).stem 
